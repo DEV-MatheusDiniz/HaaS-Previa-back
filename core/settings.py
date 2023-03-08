@@ -68,7 +68,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'PAGE_SIZE': 10
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -114,7 +113,8 @@ DATABASES = {
         'NAME': 'haas_cliente',
         'USER': 'postgres',
         'PASSWORD': '123456',
-        'HOST': 'localhost'
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
