@@ -26,20 +26,21 @@ class FaturamentoItemAPIView(APIView):
 
     def get(self, reequest, id):
 
-        faturamentoItem = FaturamentoItem.objects.filter(faturamento = id).order_by('-id')
+        faturamentoItem = FaturamentoItem.objects.filter(faturamento = id).order_by('item_configuracao')
 
         serializer = FaturamentoItemSerializer(faturamentoItem, many=True)
 
-
-        for faturamento in faturamentoItem:
-
-            for item in serializer.data:
+        for item in serializer.data:
 
                 for index in item:
 
                     if index == 'item_configuracao':
 
-                        item['item_configuracao'] = faturamento.item_configuracao.no_item
+                        for faturamento in faturamentoItem:
+                            
+                            if faturamento.item_configuracao.id == item[index]:
+
+                                item[index] = faturamento.item_configuracao.no_item
 
         return Response(serializer.data)
 
