@@ -1,12 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from pprint import pprint
-
 import locale
-
 from datetime import datetime
-from dateutil.parser import parse
 
 from .models import Faturamento
 from .models import FaturamentoItem
