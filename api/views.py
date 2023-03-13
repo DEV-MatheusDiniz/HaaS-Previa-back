@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from pprint import pprint
+
 import locale
 
 from datetime import datetime
@@ -23,6 +25,7 @@ class FaturamentoAPIView(APIView):
         faturamentos = Faturamento.objects.filter(st_situacao = 'previa').order_by('-dt_cadastro')
 
         serializer = FaturamentoSerializer(faturamentos, many=True)
+
 
         for item in serializer.data:
 
@@ -75,15 +78,27 @@ class FaturamentoItemAPIView(APIView):
 
         for item in serializer.data:
 
-                for index in item:
+            # Descrição
+            itemConfiguracao = ItemConfiguracao.objects.filter(id = item['item_configuracao'])
+            
+            for ic in itemConfiguracao:
 
-                    if index == 'item_configuracao':
+                item['item_configuracao'] = ic.no_item
 
-                        for faturamento in faturamentoItem:
-                            
-                            if faturamento.item_configuracao.id == item[index]:
+            # % Relevância
+            item['vl_relevancia'] = item['vl_relevancia'] + '%'
 
-                                item[index] = faturamento.item_configuracao.no_item
+            # % Diversidade
+            item['vl_diversidade'] = item['vl_diversidade'] + '%'
+
+            # Quantidade de US's estimada para consumo unitario
+            item['vl_item'] = locale.currency(float(item['vl_item']), symbol=False, grouping=True)
+
+            # Quantidade de US's estimada para consumo por grupo
+            item['vl_total_item'] = locale.currency(float(item['vl_total_item']), symbol=False, grouping=True)
+
+            # Valor mensal para a sustenção do item
+            item['vl_total_faturado'] = locale.currency(float(item['vl_total_faturado']), symbol=False, grouping=True)
 
         return Response(serializer.data)
 
