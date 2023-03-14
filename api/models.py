@@ -429,3 +429,22 @@ class FaturamentoItem(models.Model):
             models.Index(fields=['dt_cadastro'],
                          name='c_ftritm_dt_cadastro_idx'),
         ]
+
+class FaturamentoItemConteudo(models.Model):
+    id = models.AutoField(primary_key=True)
+    faturamento_item = models.ForeignKey(
+        FaturamentoItem, related_name='FaturamentoItemConteudoFaturamentoItem', on_delete=models.PROTECT)
+    js_contabilizado = models.JSONField(null=False)
+    js_nao_contabilizado = models.JSONField(null=True)
+    js_condicional = models.JSONField(null=True)
+    js_diversidade = models.JSONField(null=True)
+    dt_cadastro = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'api'
+        db_table = 'cliente\".\"faturamento_item_conteudo'
+        indexes = [
+            models.Index(fields=['id'], name='c_ftritmctd_id_idx'),
+            models.Index(fields=['dt_cadastro'],
+                         name='c_ftritmctd_dt_cadastro_idx'),
+        ]

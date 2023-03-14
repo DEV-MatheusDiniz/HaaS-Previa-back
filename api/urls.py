@@ -10,4 +10,5 @@ urlpatterns = [
     path('faturamentos/', views.FaturamentoAPIView.as_view(), name='faturamntos'),
     path('faturamentosItem/<int:id>', views.FaturamentoItemAPIView.as_view(), name='faturamentosItem'),
     path('itemConfiguracao/', views.ItemConfiguracaoAPIView.as_view(), name='itemConfiguracao'),
+    path('faturamentoItemConteudo/<int:id>', views.FaturamentoItemConteudoAPIView.as_view(), name='faturamentoItemConteudo'),
 ]

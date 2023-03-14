@@ -7,10 +7,12 @@ from datetime import datetime
 from .models import Faturamento
 from .models import FaturamentoItem
 from .models import ItemConfiguracao
+from .models import FaturamentoItemConteudo
 
 from .serializer import FaturamentoSerializer
 from .serializer import FaturamentoItemSerializer
 from .serializer import ItemConfiguracaoSerializer
+from .serializer import FaturamentoItemConteudoSerializer
 
 
 # Faturamento
@@ -95,6 +97,18 @@ class FaturamentoItemAPIView(APIView):
 
             # Valor mensal para a sustenção do item
             item['vl_total_faturado'] = locale.currency(float(item['vl_total_faturado']), symbol=False, grouping=True)
+
+        return Response(serializer.data)
+
+
+# Faturamento Item Conteudo
+class FaturamentoItemConteudoAPIView(APIView):
+    
+    def get(self, request, id):
+
+        faturamentoItemConteudo = FaturamentoItemConteudo.objects.filter(faturamento_item = id)
+
+        serializer = FaturamentoItemConteudoSerializer(faturamentoItemConteudo, many=True)
 
         return Response(serializer.data)
 
