@@ -16,7 +16,7 @@ urlpatterns = [
     path('faturamentosItem/<int:idPrevia>', views.FaturamentosItemAPIView.as_view(), name='faturamentosItem'),
 
     # Faturamento Item ONE
-    path('faturamentosItem/<int:idPrevia>/<int:idItem>', views.FaturamentoItemAPIView.as_view(), name='faturamentoItem'),
+    path('faturamentosItem/one/<int:idItem>', views.FaturamentoItemAPIView.as_view(), name='faturamentoItem'),
 
     # Item Configuração ALL
     path('itemConfiguracao/', views.ItemConfiguracaoAPIView.as_view(), name='itemConfiguracao'),

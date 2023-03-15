@@ -105,9 +105,9 @@ class FaturamentosItemAPIView(APIView):
 # Faturamento Item
 class FaturamentoItemAPIView(APIView):
 
-    def get (self, request, idPrevia, idItem):
+    def get (self, request, idItem):
 
-        faturamentoItem = FaturamentoItem.objects.filter(faturamento = idPrevia, item_configuracao = idItem)
+        faturamentoItem = FaturamentoItem.objects.filter(id = idItem)
 
         serializer = FaturamentoItemSerializer(faturamentoItem, many=True)
 
