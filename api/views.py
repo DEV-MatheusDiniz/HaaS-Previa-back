@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 import locale
 from datetime import datetime
+from typing import Optional
 
 from .models import Faturamento
 from .models import FaturamentoItem
@@ -64,14 +65,14 @@ class FaturamentoAPIView(APIView):
         return Response(serializer.data)
 
 
-# FaturamentoItem
-class FaturamentoItemAPIView(APIView):
+# Faturamentos Items
+class FaturamentosItemAPIView(APIView):
 
-    def get(self, reequest, id):
+    def get(self, request, idPrevia):
 
-        faturamentoItem = FaturamentoItem.objects.filter(faturamento = id).order_by('item_configuracao')
+        faturamentosItem = FaturamentoItem.objects.filter(faturamento = idPrevia).order_by('item_configuracao')
 
-        serializer = FaturamentoItemSerializer(faturamentoItem, many=True)
+        serializer = FaturamentoItemSerializer(faturamentosItem, many=True)
 
 
         for item in serializer.data:
@@ -99,6 +100,42 @@ class FaturamentoItemAPIView(APIView):
             item['vl_total_faturado'] = locale.currency(float(item['vl_total_faturado']), symbol=False, grouping=True)
 
         return Response(serializer.data)
+    
+
+# Faturamento Item
+class FaturamentoItemAPIView(APIView):
+
+    def get (self, request, idPrevia, idItem):
+
+        faturamentoItem = FaturamentoItem.objects.filter(faturamento = idPrevia, item_configuracao = idItem)
+
+        serializer = FaturamentoItemSerializer(faturamentoItem, many=True)
+
+        for item in serializer.data:
+
+            # Descrição
+            itemConfiguracao = ItemConfiguracao.objects.filter(id = item['item_configuracao'])
+            
+            for ic in itemConfiguracao:
+
+                item['item_configuracao'] = ic.no_item
+
+            # % Relevância
+            item['vl_relevancia'] = item['vl_relevancia'] + '%'
+
+            # % Diversidade
+            item['vl_diversidade'] = item['vl_diversidade'] + '%'
+
+            # Quantidade de US's estimada para consumo unitario
+            item['vl_item'] = locale.currency(float(item['vl_item']), symbol=False, grouping=True)
+
+            # Quantidade de US's estimada para consumo por grupo
+            item['vl_total_item'] = locale.currency(float(item['vl_total_item']), symbol=False, grouping=True)
+
+            # Valor mensal para a sustenção do item
+            item['vl_total_faturado'] = locale.currency(float(item['vl_total_faturado']), symbol=False, grouping=True)
+
+        return Response(serializer.data) 
 
 
 # Faturamento Item Conteudo
