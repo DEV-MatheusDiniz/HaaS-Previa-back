@@ -103,7 +103,7 @@ class FaturamentosItemAPIView(APIView):
     
 
 # Faturamento Item
-class FaturamentoItemAPIView(APIView):
+class FaturamentosItemOneAPIView(APIView):
 
     def get (self, request, idItem):
 
@@ -135,7 +135,9 @@ class FaturamentoItemAPIView(APIView):
             # Valor mensal para a sustenção do item
             item['vl_total_faturado'] = locale.currency(float(item['vl_total_faturado']), symbol=False, grouping=True)
 
-        return Response(serializer.data) 
+            responseJson = {  "qtdItems": len(serializer.data), "nome":  ic.no_item, "item": serializer.data }
+
+        return Response(responseJson) 
 
 
 # Faturamento Item Conteudo
