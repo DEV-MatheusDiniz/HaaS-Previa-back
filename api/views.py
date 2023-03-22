@@ -14,6 +14,8 @@ from .serializer import FaturamentoItemSerializer
 from .serializer import ItemConfiguracaoSerializer
 from .serializer import FaturamentoItemConteudoSerializer
 
+from .utils.headers_items import headersItems
+
 
 # Faturamento
 class FaturamentosAPIView(APIView):
@@ -212,8 +214,17 @@ class FaturamentoItemConteudoAPIView(APIView):
 
         serializer = FaturamentoItemConteudoSerializer(faturamentoItemConteudo, many=True)
 
+        resultado = headersItems(serializer.data)
+
         # Montando response com todas as informações
-        responseJson = {  "qtdItems": len(serializer.data), "items": serializer.data }
+        responseJson = {
+
+            "qtdItems": len(resultado['items']),
+
+            "headers": resultado['headers'],
+
+            "items": resultado['items']
+        }
 
         return Response(responseJson)
 
